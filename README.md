@@ -28,3 +28,8 @@
 # Dependencies
 - min Django 4.*
 - min Python 3.11
+- gunicorn
+- nginx
+- docker
+- docker-compose
+- tasks

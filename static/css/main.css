@@ -1,0 +1,166 @@
+body{
+  font-family: 'Manrope', sans-serif;
+  background-color: #F9FAFC;
+}
+
+#content{
+  width: 69%;
+  margin-left: 15.5%;
+}
+
+@media screen and (max-width: 1395px) {
+    #content{
+        width: 95% !important;
+        margin-left: 2.5%;
+    }
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.jstree-anchor {
+    /*enable wrapping*/
+    white-space : normal !important;
+    /*ensure lower nodes move down*/
+    height : auto !important;
+    /*offset icon width*/
+    padding-right : 24px;
+}
+
+.sidenav::-webkit-scrollbar { width: 0;}
+.sidenav { -ms-overflow-style: none; }
+
+.sidenav a {
+  font-size: 14px;
+  color: #818181;
+  transition: 0.3s;
+  padding-top: 5px;
+}
+
+
+.topnav-content a{
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+.topnav-content a:hover{
+  color: #f1eeee !important;
+}
+
+.sidenav a:hover{
+  background-color: #00CC4F;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left .5s;
+}
+
+@media screen and (max-width: 1000px) {
+  /*.sidenav {padding-top: 15px;}*/
+  .sidenav a {font-size: 18px;}
+}
+
+/* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+@media screen and (max-width: 1000px) {
+  .overlay a {
+    font-size: 12px ;
+  }
+  .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+  }
+}
+
+.bar-container {
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  width: 100%;
+}
+
+.bar1, .bar2, .bar3 {
+  width: 35px;
+  height: 5px;
+  background-color: #ffffff;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
+/* Rotate first bar */
+.change .bar1 {
+  transform: translate(0, 11px) rotate(-45deg);
+}
+
+/* Fade out the second bar */
+.change .bar2 {opacity: 0;}
+
+/* Rotate last bar */
+.change .bar3 {
+  transform: translate(0, -11px) rotate(45deg);
+}
+
+
+.topnav {
+  background-color: #00CC4F;
+  padding: 10px 10px;
+}
+
+.topnav-content{
+  width: 66%;
+  margin-left: 17%;
+}
+
+#search_field{
+  width: 45%;
+  float: right;
+}
+
+#search_field:focus{
+  border: none;
+}
+
+/* Style the links inside the navigation bar */
+#main_link {
+  float: left;
+  display: block;
+  color: #ffffff !important;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  padding-top: 5px;
+  padding-left: 5px;
+}
+
+
+/* Style the "active" element to highlight the current page */
+.topnav a.active {
+  background-color: #2196F3;
+  color: white;
+}
+
+/* When the screen is less than 600px wide, stack the links and the search field vertically instead of horizontally */
+@media screen and (max-width: 1395px) {
+  .topnav-content{
+    width: 92%;
+    margin-left: 4%;
+  }
+
+}

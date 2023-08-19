@@ -1,0 +1,49 @@
+version: '3'
+
+env:
+  testvar: "hello world"
+
+
+tasks:
+  git-fix:
+    desc: Фиксация версии в git
+    cmds:
+      - git add .
+      - git commit -m '{{if eq .CLI_ARGS ""}}Фиксация {{now | date "2006-01-02 15:04:05"}}{{else}}{{.CLI_ARGS}}{{end}}'
+      - git push origin main
+  build:
+    desc: "Собирает docker образ python"
+    cmds:
+      - docker-compose build python
+  run:
+    desc: "Запускает docker-compose"
+    cmds:
+      - docker-compose up -d
+  stop:
+    desc: "Останавливает docker-compose"
+    cmds:
+      - docker-compose down -v
+  rebuild-if-run: 
+    desc: "Пересобирает собирает docker образ python"
+    deps:
+      - stop
+      - build
+      - run
+  after-clone: 
+    desc: "Cобирает docker и запускает"
+    deps:
+      - build
+      - run
+  migrate:
+    desc: Накатить миграции на django
+    cmds:
+      - docker-compose exec python python manage.py makemigrations
+      - docker-compose exec python python manage.py migrate
+  superuser:
+    desc: Создать суперпользователя
+    cmds:
+      - docker-compose exec python python manage.py createsuperuser
+  static:
+    desc: Собрать статику
+    cmds:
+      - docker-compose exec python python manage.py collectstatic

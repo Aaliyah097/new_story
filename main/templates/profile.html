@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Профиль
+{% endblock %}
+{% block upper_links %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% csrf_token %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <img class="round" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" height="50px" width="50px" style="display: inline-block;  border-radius: 5px; margin-bottom: 0.5%"/>
+                <p style="display: inline-block; margin-left: 1%; font-weight: bold">{{ user.socialaccount_set.all.0.extra_data.name }}</p>
+            </div>
+        </div>
+        <div class="row>" id="rate_row">
+            <div class="col-md-12">
+                <div class="progress_bar_total">
+                    <div class="learned_bar" style="width: {{ total_rate }}%">
+
+                    </div>
+                </div>
+                <span style="float: right">{{total_rate}} %</span>
+            </div>
+        </div>
+    <br>
+        <div class="row">
+            {% for topic in basic_topics %}
+                <div class="col-md-3">
+                    <div class="basic_topic" onclick="window.location.href='/topic/{{ topic.slug }}/'" style="cursor: pointer">
+                        <span style="text-align: center">{{ topic.name }}</span>
+                        <div class="progress_bar">
+                            <div class="learned_bar" style="width: {{ topic.progress }}%">
+
+                            </div>
+                        </div>
+                        <span style="float: right">{{topic.progress}} %</span>
+                    </div>
+                </div>
+                {% if forloop.counter|divisibleby:"4" %}
+                    <br><br>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block links %}
+    <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
+

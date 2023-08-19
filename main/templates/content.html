@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load markdownify %}
+{% block title %}
+    {{ topic.name }}
+{% endblock %}
+{% block upper_links %}
+    <link rel="stylesheet" href="{% static 'css/topic.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% csrf_token %}
+    <br>
+    <br>
+    {% for topic in content %}
+        <div class="topic_search" onclick='window.location.href="/topic/{{ topic.slug }}"'>
+            <h3 style="font-weight: bold">{{ topic.name|title }}</h3>
+            {% if topic.name_en %}
+                {{ topic.name_en|title }}
+            {% endif %}
+            {% if topic.description %}
+                [{{ topic.description }}]
+            {% endif %}
+            <br><br>
+            {{ topic.text|truncatechars:150|markdownify|safe }}
+        <br>
+        <br>
+            <p style="float: right; right: 0">{{ topic.created_at }}</p>
+
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block links %}
+    <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
+

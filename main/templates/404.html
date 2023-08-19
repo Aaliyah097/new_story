@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Главная
+{% endblock %}
+{% block upper_links %}
+    <link rel="stylesheet" href="{% static 'css/404.css' %}">
+
+{% endblock %}
+
+{% block content %}
+    {% csrf_token %}
+    <div class="noise"></div>
+    <div class="overlay"></div>
+    <div class="terminal">
+        <h1>Error <span class="errorcode">404</span></h1>
+        <p class="output">The page you are looking for might have been removed, had its name changed or is temporarily unavailable.</p>
+        <p class="output">Please try to <a href="" onclick="window.history.go(-1); return false;">go back</a> or <a href="/">return to the homepage</a>.</p>
+        <p class="output">Good luck.</p>
+    </div>
+{% endblock %}
+
+{% block links %}
+    <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
+

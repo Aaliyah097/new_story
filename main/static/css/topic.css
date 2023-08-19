@@ -1,0 +1,163 @@
+.topic{
+    background-color: #ffffff;
+    width: 100%;
+    margin-top: 1%;
+    padding: 40px 25px;
+    border-radius: 5px ;
+    box-shadow: 2px 4px 4px 2px rgba(0, 0, 0, 0.1);
+    line-height: 150%;
+    margin-bottom: 3%;
+    float: top;
+    top: 0;
+    font-weight: 500 !important;
+    font-family: "Roboto", sans-serif !important;
+}
+
+.topic a{
+    word-wrap: break-word !important;
+}
+
+/*.topic p{*/
+/*    margin-left: 10%;*/
+
+/*}*/
+
+.topic img{
+    width: 90%;
+    height:90%;
+    margin-left: 5%;
+}
+
+.round {
+    border-radius: 100px; /* Радиус скругления */
+    width: 50px !important;
+    height: 50px !important;
+    margin-left: 0 !important;
+}
+
+.topic form input{
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #4CAF50;
+    float: right;
+    width: 40%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.django-ckeditor-widget{
+    width: 100% !important;
+}
+
+.topic form input:hover, .topic form input:active, .topic form input:focus {
+  background: #43A047;
+}
+
+.bookmark_triangle{
+    position: absolute; width: 0; height: 0;
+    border-top: 30px solid #43A047; border-right: 30px solid transparent;
+    left: 0; top: 0; cursor: pointer;
+}
+
+.bookmark_triangle:hover{
+    border-top: 35px solid #43A047;
+    border-right: 35px solid transparent;
+}
+
+.topic form label{
+    display: none !important;
+}
+.topic form ul{
+    display: none !important;
+}
+
+.topic-addiction{
+    background-color: #ffffff;
+    padding: 40px 25px;
+    border-radius: 5px ;
+    box-shadow: 2px 4px 4px 2px rgba(0, 0, 0, 0.1);
+    line-height: 150%;
+    float: top;
+    top: 0;
+    word-wrap: break-word !important;
+}
+
+.topic-addiction a, li, ul{
+    max-width: 98%;
+}
+
+.topic_search a{
+    word-wrap: break-word !important;
+}
+
+.jstree-anchor {
+    /*enable wrapping*/
+    white-space : normal !important;
+    /*ensure lower nodes move down*/
+    height : auto !important;
+    /*offset icon width*/
+    padding-right : 24px;
+}
+
+.topic_search{
+    background-color: #ffffff;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 1%;
+    padding: 40px 25px;
+    border-radius: 5px ;
+    box-shadow: 2px 4px 4px 2px rgba(0, 0, 0, 0.2);
+    line-height: 150%;
+    margin-bottom: 3%;
+}
+
+.topic_search:hover{
+    /*box-shadow: 0px 5px 10px 0px #00CC4F;*/
+    background-color: #00CC4F;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1395px) {
+    .topic{
+        width: 100%;
+        margin-left: 0;
+    }
+    .topic form input{
+        width: 100%;
+        margin: 0;
+    }
+    .topic img{
+        width: 80%;
+        height: 80%;
+        margin-left: 5%;
+    }
+    .round {
+        border-radius: 100px; /* Радиус скругления */
+        width: 50px !important;
+        height: 50px !important;
+        margin-left: 0 !important;
+    }
+    .topic-addiction{
+        padding: 15px 0;
+    }
+}
+
+.next_link{
+    color: #00CC4F !important;
+    text-decoration: none !important;
+}
+
+.next_link:hover{
+    color: #118d41 !important;
+}
+
+.comment_answer_text a{
+    color: #2196F3;
+}
+
+/*pre{color:#fdce93;background-color:#3f3f3f; padding: .5em 1em}*/

@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load markdownify %}
+{% load static %}
+{% block title %}
+    {{ topic.name }}
+{% endblock %}
+{% block upper_links %}
+    <link rel="stylesheet" href="{% static 'css/topic.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/vs.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <p>{{ route|markdownify|safe }}</p>
+
+                {% if not user.is_authenticated %}
+                    <p style="font-size: 14px; color: gray"># Войдите, чтобы иметь возможность сохранять свой прогресс обучения.</p>
+                {% endif %}
+                <div class="topic" style="position: relative">
+
+                    <form method="post" action="/bookmarks/add/{{topic.slug}}/">
+                        {% csrf_token %}
+                        <div class="bookmark_triangle" title="Добавить в закладки" onclick="this.parentNode.submit()">
+
+                        </div>
+                    </form>
+
+                    {% if user.is_authenticated %}
+                        {% if is_learned %}
+                            <form method="post" action="/topic/set-not-learned/{{ topic.slug }}/">
+                                {% csrf_token %}
+                                <button type="submit" style="float: right; top: 0; right: 0; cursor: pointer; border: none; background-color: transparent">
+                                    <img width="32px" height="32px"
+                                         style="width: 32px; height: 32px"
+                                         alt="Отметить не выученным"
+                                         title="Отметить не выученным" src="{% static '/img/checked.png' %}">
+                                </button>
+                            </form>
+                    {% else %}
+                    <form method="post" action="/topic/set-learned/{{ topic.slug }}/">
+                        {% csrf_token %}
+                        <button type="submit" style="float: right; top: 0; right: 0; cursor: pointer; border: none; background-color: transparent">
+                            <img width="32px" height="32px"
+                                 style="width: 32px; height: 32px"
+                                 alt="Отметить выученным"
+                                 title="Отметить выученным" src="{% static '/img/close.png' %}">
+                        </button>
+                    </form>
+                    {% endif %}
+                    {% endif %}
+                    <h3 style="font-weight: bold">{{ topic.name|title }}</h3>
+                    {% if topic.name_en %}
+                    {{ topic.name_en|title }}
+                    {% endif %}
+                    {% if topic.description %}
+                    [{{ topic.description }}]
+                    {% endif %}
+                    <br>
+                    <br>
+                    {{ topic.text|markdownify|safe }}
+                    <br>
+                    {% if  topic.more_link %}
+                    Подробнее: <a href="{{ topic.more_link }}">{{ topic.more_link }}</a>
+                    {% endif %}
+                    <br>
+                    {% for attachment in topic.attachments.all %}
+                    {% if attachment.image %}
+                    <img style="width: 60%; margin-left: 15%" src="{{ attachment.image.url }}" alt="{{ attachment.name }}">
+                    <p style="text-align: center">{{ attachment.name }}</p>
+                    {% endif %}
+                    {#                        {% if attachment.file %}#}
+                    {#                            <a style="text-align: center" href="{{ attachment.file.path }}" target="_blank">{{ attachment.name }}</a>#}
+                    {#                        {% endif %}#}
+                    {% endfor %}
+                </div>
+                <!---Обр связь-->
+                {% if user.is_authenticated %}
+                <p style="font-size: 14px; color: gray"># Есть предложения по материалу? — Свяжитесь со мной по электронной почте
+                    <a style="color: #4CAF50; cursor: pointer" href="mailto:name.boltz@gmail.com">self@arcane-switch.com</a></p>
+                {% endif %}
+                <!---Комментарии--->
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>Комментариев <strong>|</strong> {{ comments_amount }} шт.</p>
+                        <div class="topic"  style="height: 100% !important">
+                            {% if user.is_authenticated %}
+                            <div style="flex-direction: row">
+                                <img class="round" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" height="50px" width="50px" style="display: inline-block"/>
+                                <p style="display: inline-block; margin-left: 1%; font-weight: bold">{{ user.socialaccount_set.all.0.extra_data.name }}</p>
+                            </div>
+                            {% else %}
+                            <p>Мне интересно знать Ваше мнение. Но надо <a href="/accounts/google/login/">войти</a>, чтобы иметь возможность оставлять комментарии.</p>
+                            {% endif %}
+                            <div id="answer_to" style="display: none; margin-top: 2%"></div>
+
+                            <form style="margin-top: 3%; width: 100% !important;" method="post" action="/comments/create/{{ topic.slug }}/">
+                                {% csrf_token %}
+                                <input type="hidden" name="parent" id="parentcomment" value="">
+                                {{ form.media }}
+                                {{ form }}
+                                {% if user.is_authenticated %}
+                                <input type="submit" value="Оставить комментарий">
+                                {% else %}
+                                <input type="submit" disabled style="background-color: #b3b3b3" value="Оставить комментарий">
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                {% if comments|length != 0 %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="topic">
+                            {% for comment in comments %}
+                            <div id="comment_block_{{ comment.id }}">
+                                <div style="flex-direction: row">
+                                    <img class="round" src="{{ comment.author.socialaccount_set.all.0.get_avatar_url }}" height="50px" width="50px" style="display: inline-block"/>
+                                    <p style="display: inline-block; margin-left: 1%; font-weight: bold">{{ comment.author.socialaccount_set.all.0.extra_data.name }}</p>
+                                    <a style="display: inline-block; font-size: 12px; color: #000000;">{{ comment.created_at.date }}</a>
+                                    {% if user.is_superuser  %}
+                                    <a style="font-size: 12px; color: firebrick; cursor: pointer;" onclick="delete_comment('{{ comment.id }}', true)">скрыть</a>
+                                    {% endif %}
+                                </div>
+                                <div style="margin-left: calc(50px + 1.5%) !important;">
+                                    <span id="comment_text_{{ comment.id }}">{{ comment.text|markdownify|safe }}</span>
+                                    {% if user.is_authenticated %}
+                                    <a style="font-size: 14px; color: #4CAF50; cursor: pointer;"
+                                       onclick="prepare_answer('{{ comment.author.socialaccount_set.all.0.extra_data.name }}', '{{ comment.id }}')">Ответить</a>
+                                </div>
+                                {% else %}
+                                <a style="font-size: 14px; color: #858383;" disabled >Ответить</a>
+                            </div>
+                            {% endif %}
+                            {% if comment.answers.all %}
+                            <br>
+                            {% for answer in comment.answers.all %}
+                            <div style="margin-left: calc(50px + 1.5%) !important;" id="comment_answer_block_{{ answer.id }}">
+                                <div style="flex-direction: row">
+                                    <img class="round" src="{{ answer.author.socialaccount_set.all.0.get_avatar_url }}" height="25" width="25" style="display: inline-block"/>
+                                    <p style="display: inline-block; margin-left: 1%; font-weight: bold">{{ answer.author.socialaccount_set.all.0.extra_data.name }}</p>
+                                    <a style="font-size: 12px; color: #000000; ">{{ answer.created_at.date }}</a>
+                                    {% if user.is_superuser  %}
+                                    <a style="font-size: 12px; color: firebrick; cursor: pointer;" onclick="delete_comment('{{ answer.id }}', false)">скрыть</a>
+                                    {% endif %}
+                                </div>
+                                <div style="margin-left: calc(25px + 1.5%) !important;" class="comment_answer_text">
+                                    <span id="answer_text_{{ answer.id }}">{{ answer.text|markdownify|safe }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                            <br>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <h3>Продолжение темы</h3>
+            <div class="row">
+                <div style="flex-direction: row;">
+                    <a class="next_link" style="display: inline-block; float: left; cursor: pointer;" href="/get-previous-topic/{{ topic.slug }}/"><< назад</a>
+                    <a class="next_link" style="display: inline-block; float: right; cursor: pointer;" href="/get-next-topic/{{ topic.slug }}/">далее >></a>
+                </div>
+            </div>
+            <div class="topic-addiction">
+                <div id="more_tree"></div>
+            </div>
+        </div>
+    </div>
+<br>
+<br>
+<br>
+<br>
+
+{% endblock %}
+
+{% block links %}
+<script src="{% static 'js/more.js' %}"></script>
+<script src="{% static 'js/topic.js' %}"></script>
+{% endblock %}
+

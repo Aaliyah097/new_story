@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Галлерея
+{% endblock %}
+{% block upper_links %}
+    <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% csrf_token %}
+    {% for wing in gallery %}
+        <h4 style="cursor: pointer; color: dodgerblue" onclick="open_gallery_block('gallery_block_{{wing.id}}')">{{ wing.cat }} . . .
+            <span style="float: right; font-size: 16px; color: black;">{{wing.updated_at}}</span>
+        </h4>
+        <hr>
+        <div class="container-fluid" style="display: block" id="gallery_block_{{wing.id}}" opened="true">
+            <br>
+            <div class="row" >
+                {% for artifact in wing.artifacts.all %}
+                    <div class="col-md-3">
+                        <div class="gallery">
+                            <a target="_blank" href="{{artifact.image.url}}">
+                                <img src="{{artifact.image.url}}" alt="{{artifact.name}}">
+                            </a>
+                            <div class="desc">{{artifact.name}}</div>
+                        </div>
+                    </div>
+                    {% if forloop.counter == 5 %}
+                        <br><br>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block links %}
+    <script src="{% static 'js/gallery.js' %}"></script>
+{% endblock %}
+

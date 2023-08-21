@@ -5,6 +5,8 @@
 __pycache__
 media
 archive
+static
+!main/static
 
 
 # Backup files #

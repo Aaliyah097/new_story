@@ -24,6 +24,8 @@
 > NO AUTH (or only Google)  
 > NO PAYMENTS
 
+# Components diagram
+![components.png](assets/components.png)
 
 # Dependencies
 - min Django 4.*
@@ -33,3 +35,4 @@
 - docker
 - docker-compose
 - tasks
+- mptt

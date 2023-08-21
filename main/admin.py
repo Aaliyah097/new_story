@@ -1,36 +1,14 @@
 from django.contrib import admin
 from django.urls import reverse
-from django_mptt_admin.admin import DjangoMpttAdmin
 from .models import *
 from mptt.admin import DraggableMPTTAdmin, TreeRelatedFieldListFilter
 from .forms import TopicForm
 from django.utils.html import mark_safe
 from mdeditor.widgets import MDEditorWidget
 
-# Register your models here.
-
 
 class AnswerInline(admin.TabularInline):
     model = Answer
-
-
-class ArtifactInline(admin.TabularInline):
-    model = Artifact
-
-
-@admin.register(Artifact)
-class ArtifactAdmin(admin.ModelAdmin):
-    list_display = ['gallery', 'name']
-
-    list_filter = ['gallery__cat', ]
-
-
-@admin.register(Gallery)
-class GalleryAdmin(admin.ModelAdmin):
-    list_display = ['cat', 'updated_at', 'created_at']
-    list_filter = ['cat', ]
-
-    inlines = [ArtifactInline, ]
 
 
 @admin.register(Comment)
@@ -94,3 +72,21 @@ class TopicAdmin(DraggableMPTTAdmin):
 
     get_text.short_description = 'Текст'
 
+
+class ArtifactInline(admin.TabularInline):
+    model = Artifact
+
+
+@admin.register(Artifact)
+class ArtifactAdmin(admin.ModelAdmin):
+    list_display = ['gallery', 'name']
+
+    list_filter = ['gallery__cat', ]
+
+
+@admin.register(Gallery)
+class GalleryAdmin(admin.ModelAdmin):
+    list_display = ['cat', 'updated_at', 'created_at']
+    list_filter = ['cat', ]
+
+    inlines = [ArtifactInline, ]

@@ -1,12 +1,11 @@
-from django.contrib.postgres.fields import ArrayField
+import datetime
+
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 from ckeditor.fields import RichTextField
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-
-# Create your models here.
 
 
 class Topic(MPTTModel):
@@ -22,23 +21,20 @@ class Topic(MPTTModel):
                             unique=True,
                             db_index=True,
                             default=None, null=True)
-    parent = TreeForeignKey('self',
-                            on_delete=models.CASCADE,
-                            null=True, blank=True,
-                            related_name='children')
+    parent: 'Topic' = TreeForeignKey('self',
+                                     on_delete=models.CASCADE,
+                                     null=True, blank=True,
+                                     related_name='children')
     text = RichTextField(verbose_name='Текст',
                          null=True, blank=True, default=None)
     more_link = models.CharField(verbose_name='Подробнее',
                                  max_length=500,
                                  default=None, blank=True, null=True)
-
     is_basic = models.BooleanField(verbose_name='Базовая тема',
                                    default=False, blank=True, null=True)
-
-    created_at = models.DateTimeField(verbose_name='Дата создания',
-                                      auto_now=True,
-                                      blank=True, null=True)
-
+    created_at: datetime.datetime = models.DateTimeField(verbose_name='Дата создания',
+                                                         auto_now=True,
+                                                         blank=True, null=True)
     learned_by_users = models.ManyToManyField(User, verbose_name='Изучено пользователями',
                                               related_name='learned_by_users')
 
@@ -116,15 +112,12 @@ class Comment(models.Model):
                               on_delete=models.CASCADE,
                               related_name='comments',
                               default=None, blank=True, null=True)
-
     author = models.ForeignKey(User, verbose_name='Автор',
                                on_delete=models.CASCADE,
                                related_name='author_comments',
                                default=None, blank=True, null=True)
-
     text = models.TextField(verbose_name='Текст',
                             default=None, blank=True, null=True)
-
     created_at = models.DateTimeField(verbose_name='Дата создания',
                                       auto_now_add=True,
                                       blank=True, null=True)
@@ -141,15 +134,12 @@ class Answer(models.Model):
                                 on_delete=models.CASCADE,
                                 related_name='answers',
                                 default=None, blank=True, null=True)
-
     author = models.ForeignKey(User, verbose_name='Автор',
                                on_delete=models.CASCADE,
                                related_name='author_comment_answers',
                                default=None, blank=True, null=True)
-
     text = models.TextField(verbose_name='Текст',
                             default=None, blank=True, null=True)
-
     created_at = models.DateTimeField(verbose_name='Дата создания',
                                       auto_now_add=True,
                                       blank=True, null=True)
@@ -181,9 +171,9 @@ class Gallery(models.Model):
 
 
 class Artifact(models.Model):
-    gallery = models.ForeignKey(Gallery, verbose_name='Галлерея',
-                                on_delete=models.CASCADE,
-                                related_name='artifacts')
+    gallery: Gallery = models.ForeignKey(Gallery, verbose_name='Галлерея',
+                                         on_delete=models.CASCADE,
+                                         related_name='artifacts')
     name = models.CharField(verbose_name='Название',
                             max_length=150,
                             default=None, blank=True, null=True)
@@ -224,4 +214,3 @@ def delete_files(sender, instance, **kwargs):
         instance.image.delete(False)
     except AttributeError:
         pass
-

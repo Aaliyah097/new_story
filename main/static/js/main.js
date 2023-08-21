@@ -87,26 +87,6 @@ function open_side_menu(){
     }
 }
 
-function delete_bookmark(slug){
-    let csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
-    $.ajax(
-         {
-             type: 'post',
-             url: '/bookmarks/remove/' + slug + '/',
-             headers: {'X-CSRFToken': csrf_token},
-             mode: 'same-origin',
-             async: true,
-             success : function(json)
-             {
-               let el = document.getElementById("bookmark_" + slug);
-               el.remove();
-             },
-             error : function(xhr,errmsg,err) {
-                alert('Ошибка!', 'Повторите попытку позднее.');
-             }
-         }
-     )
-}
 
 document.addEventListener("DOMContentLoaded", function(event) {
     plot_tree(get_tree_data());
